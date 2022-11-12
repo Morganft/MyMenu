@@ -1,0 +1,16 @@
+body {
+  background-imag: url(../img/oriental-tiles.png);
+}
+
+.logo {
+  font-family: 'Cairo Play', cursive;
+}
+
+.logo a {
+  color: rgba(0, 0, 0, .9);
+}
+
+.logo a:hover,
+.logo a:active {
+  text-decoration: none,
+}
