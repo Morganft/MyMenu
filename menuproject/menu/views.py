@@ -1,8 +1,11 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+
+from .models import Receipt
 
 # Create your views here.
 
 def home(request):
-  return HttpResponse('Hello, World!')
+  receipts = Receipt.objects.all()
+  
+  return render(request, 'home.html', {'receipts': receipts})
 

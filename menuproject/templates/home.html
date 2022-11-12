@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Receipts</title>
+</head>
+<body>
+  <h1>Receipts</h1>
+
+  <table border="1">
+    <thead>
+      <tr>
+        <th>Receipt</th>
+        <th>Rating</th>
+        <th>Difficulty</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for receipt in receipts %}
+        <tr>
+          <td>
+            {{ receipt.name }}<br>
+            <smal style="color: #888">{{ receipt.description }}</smal>
+          </td>
+          <td>0</td>
+          <td>0</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  {% for receipt in receipts %}
+    {{ receipt.name }} <br>
+  {% endfor %}
+
+</body>
+</html>
