@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}Add a New Ingredient{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'home' %}">Receipts</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'receipt' receipt.pk %}">{{ receipt.name }}</a></li>
+  <li class="breadcrumb-item active">New Ingredient</li>
+{% endblock %}
+
+{% block content %}
+  <form method="post" novalidate>
+    {% csrf_token %}
+    <div class="form-group">
+      <label for="id_type">Type</label>
+      <select name="type" class="form-control" id="id_type">
+        {% for ingredient_type in ingredient_types %}
+          <option value="{{ ingredient_type.pk }}">{{ ingredient_type.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="id_amount">Amount</label>
+      <input type="text" class="form-control" id="id_amount" name="amount">
+    </div>
+    <button type="submit" class="btn btn-success">Save</button>
+  </form>
+
+{% endblock %}

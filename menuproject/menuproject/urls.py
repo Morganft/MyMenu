@@ -21,5 +21,6 @@ from menu import views
 urlpatterns = [
     path('', views.home, name='home'),
     re_path(r'^receipts/(?P<pk>\d+)/$', views.receipt, name='receipt'),
+    re_path(r'^receipts/(?P<receipt_pk>\d+)/new_ingredient/$', views.new_ingredient, name='new_ingredient'),
     path('admin/', admin.site.urls),
 ]

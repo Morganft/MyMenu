@@ -10,5 +10,18 @@
 {% endblock %}
 
 {% block content %}
-  
+  <table class="table">
+    <thead class="thead-dark">
+      <tr>
+        <th>Ingredient</th>
+        <th>Amount</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for ingredient in receipt.ingridients.all %}
+        <td>{{ ingredient.type.name }}</td>
+        <td>{{ ingredient.amount }}</td>
+      {% endfor %}
+    </tbody>
+  </table>
 {% endblock %}
