@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load widget_tweaks %}
+
 {% block title %}Add a New Ingredient{% endblock %}
 
 {% block breadcrumb %}
@@ -11,18 +13,7 @@
 {% block content %}
   <form method="post" novalidate>
     {% csrf_token %}
-    <div class="form-group">
-      <label for="id_type">Type</label>
-      <select name="type" class="form-control" id="id_type">
-        {% for ingredient_type in ingredient_types %}
-          <option value="{{ ingredient_type.pk }}">{{ ingredient_type.name }}</option>
-        {% endfor %}
-      </select>
-    </div>
-    <div class="form-group">
-      <label for="id_amount">Amount</label>
-      <input type="text" class="form-control" id="id_amount" name="amount">
-    </div>
+    {% include 'includes/form.html' %}
     <button type="submit" class="btn btn-success">Save</button>
   </form>
 

@@ -10,6 +10,10 @@
 {% endblock %}
 
 {% block content %}
+  <div class="mb-4">
+    <a href="{% url 'new_ingredient' receipt.pk %}" class="btn btn-primary">New Ingredient</a>
+  </div>
+  
   <table class="table">
     <thead class="thead-dark">
       <tr>

@@ -19,6 +19,9 @@ class Receipt(models.Model):
 class IngredientType(models.Model):
   name = models.CharField(max_length=30, unique=True)
 
+  def __str__(self):
+    return self.name
+
 class Ingredient(models.Model):
   type = models.ForeignKey(IngredientType, on_delete=models.DO_NOTHING)
   amount  = models.CharField(max_length=30)

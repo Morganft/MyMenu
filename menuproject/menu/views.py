@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 
+from .forms import NewIngredientForm
 from .models import Receipt, IngredientType, Ingredient
 
 # Create your views here.
@@ -17,16 +18,15 @@ def new_ingredient(request, receipt_pk):
   receipt = get_object_or_404(Receipt, pk=receipt_pk)
 
   if request.method == 'POST':
-    amount = request.POST['amount']
-    ingredient_type = IngredientType.objects.first()
+    form = NewIngredientForm(request.POST)
+    if form.is_valid():
+      ingredient = form.save(commit=False)
+      ingredient.receipt = receipt
+      ingredient.save()
 
-    ingredient = Ingredient.objects.create(
-      type=ingredient_type,
-      amount=amount,
-      receipt=receipt
-    )
-
-    return redirect('receipt', pk=receipt.pk)
+      return redirect('receipt', pk=receipt.pk)
+  else:
+    form = NewIngredientForm()
 
   ingredient_types = IngredientType.objects.all()
-  return render(request, 'new_ingredient.html', {'receipt': receipt, 'ingredient_types': ingredient_types})
+  return render(request, 'new_ingredient.html', {'receipt': receipt, 'ingredient_types': ingredient_types, 'form': form})

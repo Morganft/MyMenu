@@ -2,7 +2,8 @@ from django.test import TestCase
 from django.urls import reverse, resolve
 from .views import home, receipt, new_ingredient
 from django.contrib.auth.models import User
-from .models import Receipt
+from .models import Receipt, IngredientType, Ingredient
+from .forms import NewIngredientForm
 
 # Create your tests here.
 class HomeTests(TestCase):
@@ -44,14 +45,18 @@ class ReceiptTests(TestCase):
 
   def test_receipt_view_contains_link_back_to_homepage(self):
     receipt_url = reverse('receipt', kwargs={'pk': self.receipt.pk})
-    response = self.client.get(receipt_url)
     homepage_url = reverse('home')
-    self.assertContains(response, 'href="{0}"'.format(homepage_url))
+    new_ingredient_url = reverse('new_ingredient', kwargs={'receipt_pk': self.receipt.pk})
 
-class NewIngredient(TestCase):
+    response = self.client.get(receipt_url)
+    self.assertContains(response, 'href="{0}"'.format(homepage_url))
+    self.assertContains(response, 'href="{0}"'.format(new_ingredient_url))
+
+class NewIngredientTests(TestCase):
   def setUp(self):
     self.user = User.objects.create(username='user1', email='user1@mail.com', password='123456')
     self.receipt = Receipt.objects.create(name='Soup', description='Simple Soup', created_by=self.user)
+    self.ingredient_type = IngredientType.objects.create(name='Tomato')
 
   def test_new_ingredient_view_success_status_code(self):
     url = reverse('new_ingredient', kwargs={'receipt_pk': self.receipt.pk})
@@ -72,3 +77,40 @@ class NewIngredient(TestCase):
     receipt_url = reverse('receipt', kwargs={'pk': self.receipt.pk})
     response = self.client.get(new_ingredient_url)
     self.assertContains(response, 'href="{0}"'.format(receipt_url))
+
+  def test_csrf(self):
+    url = reverse('new_ingredient', kwargs={'receipt_pk': self.receipt.pk})
+    response = self.client.get(url)
+    self.assertContains(response, 'csrfmiddlewaretoken')
+
+  def test_new_ingredient_valid_post_data(self):
+    url = reverse('new_ingredient', kwargs={'receipt_pk': self.receipt.pk})
+    data = {
+      'type': self.ingredient_type.pk,
+      'amount': 11
+    }
+    response = self.client.post(url, data)
+    self.assertTrue(Ingredient.objects.exists())
+
+  def test_new_ingredient_invalid_post_data(self):
+    url = reverse('new_ingredient', kwargs={'receipt_pk': self.receipt.pk})
+    response = self.client.post(url, {})
+    form = response.context.get('form')
+    self.assertEquals(response.status_code, 200)
+    self.assertTrue(form.errors)
+
+  def test_new_ingredient_invalid_post_data_empty_fields(self):
+    url = reverse('new_ingredient', kwargs={'receipt_pk': self.receipt.pk})
+    data = {
+      'amount': '',
+      'type': ''
+    }
+    response = self.client.post(url, data)
+    self.assertEquals(response.status_code, 200)
+    self.assertFalse(Ingredient.objects.exists())
+
+  def test_contains_form(self):
+    url = reverse('new_ingredient', kwargs={'receipt_pk': self.receipt.pk})
+    response = self.client.get(url)
+    form = response.context.get('form')
+    self.assertIsInstance(form, NewIngredientForm)
