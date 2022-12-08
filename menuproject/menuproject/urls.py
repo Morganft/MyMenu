@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, re_path
+from django.contrib.auth import views as auth_views
 
 from accounts import views as account_views
 from menu import views
@@ -22,6 +23,7 @@ from menu import views
 urlpatterns = [
     path('', views.home, name='home'),
     path('signup/', account_views.signup, name='signup'),
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     re_path(r'^receipts/(?P<pk>\d+)/$', views.receipt, name='receipt'),
     re_path(r'^receipts/(?P<receipt_pk>\d+)/new_ingredient/$', views.new_ingredient, name='new_ingredient'),
     path('admin/', admin.site.urls),
