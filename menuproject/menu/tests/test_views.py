@@ -1,9 +1,10 @@
 from django.test import TestCase
 from django.urls import reverse, resolve
-from .views import home, receipt, new_ingredient
 from django.contrib.auth.models import User
-from .models import Receipt, IngredientType, Ingredient
-from .forms import NewIngredientForm
+
+from ..views import home, receipt, new_ingredient
+from ..models import Receipt, IngredientType, Ingredient
+from ..forms import NewIngredientForm
 
 # Create your tests here.
 class HomeTests(TestCase):
