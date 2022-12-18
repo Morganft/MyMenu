@@ -46,6 +46,10 @@ urlpatterns = [
              template_name='password_reset_complete.html'
          ),
          name='password_reset_complete'),
+    path('settings/password/', auth_views.PasswordChangeView.as_view(template_name='password_change.html'),
+         name='password_change'),
+    path('settings/password/done/', auth_views.PasswordChangeDoneView.as_view(template_name='password_change_done.html'),
+         name='password_change_done'),
     re_path(r'^receipts/(?P<pk>\d+)/$', views.receipt, name='receipt'),
     re_path(r'^receipts/(?P<receipt_pk>\d+)/new_ingredient/$',
             views.new_ingredient, name='new_ingredient'),
