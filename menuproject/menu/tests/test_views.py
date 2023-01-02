@@ -72,6 +72,15 @@ class ReceiptTests(TestCase):
     self.assertContains(response, 'href="{0}"'.format(homepage_url))
     self.assertContains(response, 'href="{0}"'.format(new_ingredient_url))
 
+  def test_receipt_view_contains_link_back_to_receipts(self):
+    receipt_url = reverse('receipt', kwargs={'pk': self.receipt.pk})
+    receipts_url = reverse('receipts')
+    new_ingredient_url = reverse('new_ingredient', kwargs={'receipt_pk': self.receipt.pk})
+
+    response = self.client.get(receipt_url)
+    self.assertContains(response, 'href="{0}"'.format(receipts_url))
+    self.assertContains(response, 'href="{0}"'.format(new_ingredient_url))
+
 class NewIngredientTests(TestCase):
   def setUp(self):
     self.user = User.objects.create(username='user1', email='user1@mail.com', password='123456')
@@ -97,6 +106,18 @@ class NewIngredientTests(TestCase):
     receipt_url = reverse('receipt', kwargs={'pk': self.receipt.pk})
     response = self.client.get(new_ingredient_url)
     self.assertContains(response, 'href="{0}"'.format(receipt_url))
+
+  def test_new_ingredient_view_contains_link_back_to_receipts(self):
+    new_ingredient_url = reverse('new_ingredient', kwargs={'receipt_pk': self.receipt.pk})
+    receipts_url = reverse('receipts')
+    response = self.client.get(new_ingredient_url)
+    self.assertContains(response, 'href="{0}"'.format(receipts_url))
+
+  def test_new_ingredient_view_contains_link_back_to_home(self):
+    new_ingredient_url = reverse('new_ingredient', kwargs={'receipt_pk': self.receipt.pk})
+    home_url = reverse('home')
+    response = self.client.get(new_ingredient_url)
+    self.assertContains(response, 'href="{0}"'.format(home_url))
 
   def test_csrf(self):
     url = reverse('new_ingredient', kwargs={'receipt_pk': self.receipt.pk})
@@ -150,6 +171,12 @@ class NewReceiptTests(TestCase):
     self.assertEquals(view.func, new_receipt)
 
   def test_view_contains_link_back_to_receipts(self):
+    url = reverse('new_receipt')
+    url_receipts = reverse('receipts')
+    response = self.client.get(url)
+    self.assertContains(response, 'href="{0}"'.format(url_receipts))
+
+  def test_view_contains_link_back_to_home(self):
     url = reverse('new_receipt')
     url_receipts = reverse('home')
     response = self.client.get(url)

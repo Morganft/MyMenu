@@ -5,7 +5,8 @@
 {% endblock %}
 
 {% block breadcrumb %}
-  <li class="breadcrumb-item"><a href="{% url 'home' %}">Receipts</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'receipts' %}">Receipts</a></li>
   <li class="breadcrumb-item active">{{ receipt.name }} </li>
 {% endblock %}
 
@@ -13,7 +14,7 @@
   <div class="mb-4">
     <a href="{% url 'new_ingredient' receipt.pk %}" class="btn btn-primary">New Ingredient</a>
   </div>
-  
+
   <table class="table">
     <thead class="thead-dark">
       <tr>
