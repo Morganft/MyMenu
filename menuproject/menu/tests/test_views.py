@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.urls import reverse, resolve
 from django.contrib.auth.models import User
 
-from ..views import home, receipt, new_ingredient, new_receipt
+from ..views import home, receipts, receipt, new_ingredient, new_receipt
 from ..models import Receipt, IngredientType, Ingredient
 from ..forms import NewIngredientForm, NewReceiptForm
 
@@ -21,9 +21,8 @@ class HomeTests(TestCase):
     view = resolve('/')
     self.assertEquals(view.func, home)
 
-  def test_home_view_contains_link_to_receipt_page(self):
-    receipt_url = reverse('receipt', kwargs={'pk': self.receipt.pk})
-    self.assertContains(self.response, 'href="{0}"'.format(receipt_url))
+  def test_home_view_contains_placeholder(self):
+    self.assertContains(self.response, 'Here is a placeholder for future home page')
 
 
 class ReceiptsTests(TestCase):
@@ -38,7 +37,7 @@ class ReceiptsTests(TestCase):
 
   def test_receipts_url_resolves_receipts_view(self):
     view = resolve('/receipts/')
-    self.assertEquals(view.func, home)
+    self.assertEquals(view.func, receipts)
 
   def test_receipts_view_contains_link_to_receipt_page(self):
     receipt_url = reverse('receipt', kwargs={'pk': self.receipt.pk})

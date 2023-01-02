@@ -11,6 +11,11 @@ def home(request):
   
   return render(request, 'home.html', {'receipts': receipts})
 
+def receipts(request):
+  receipts = Receipt.objects.all()
+
+  return render(request, 'receipts.html', {'receipts': receipts})
+
 def receipt(request, pk):
   receipt = get_object_or_404(Receipt, pk=pk)
   return render(request, 'receipt.html', {'receipt': receipt})

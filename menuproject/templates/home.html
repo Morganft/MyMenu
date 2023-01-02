@@ -5,25 +5,5 @@
 {% endblock %}
 
 {% block content %}
-  <table class="table">
-    <thead class="thead-dark">
-      <tr>
-        <th>Receipt</th>
-        <th>Rating</th>
-        <th>Difficulty</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for receipt in receipts %}
-        <tr>
-          <td>
-            <a href="{% url 'receipt' receipt.pk %}">{{ receipt.name }}</a>
-            <small class="text-muted d-blok">{{ receipt.desciption }}</small>
-          </td>
-          <td class="align-middle">0</td>
-          <td class="align-middle">0</td>
-        </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+  <p>Here is a placeholder for future home page</p>
 {% endblock %}
