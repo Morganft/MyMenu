@@ -2,12 +2,16 @@ name: learn-github-actions
 run-name: ${{ github.actor }} is learning GitHub Actions
 on: [push]
 jobs:
-  check-bats-version:
+  run-tests:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-python@v4
         with:
-          node-version: '14'
-      - run: npm install -g bats
-      - run: bats -v
+          python-version: '3.8'
+
+      - name: Install dependencies
+        run: pip install -r env/requirements.txt
+      - run : python3 menuproject/manage.py migrate
+      - name: Test
+        run: (cd menuproject; python3 ./manage.py test)
