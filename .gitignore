@@ -2,3 +2,5 @@ data/db/
 credentials.**
 .env
 *.sqlite*
+**/__pycache__
+test_env/
