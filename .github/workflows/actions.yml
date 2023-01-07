@@ -2,6 +2,16 @@ name: learn-github-actions
 run-name: ${{ github.actor }} is learning GitHub Actions
 on: [push]
 jobs:
+  run-linter:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install flake8
+        run: pip install flake8
+      - name: Lint with flake8
+        run: |
+          (cd menuproject; flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics)
+          (cd menuproject; flake8 . --count --max-complexity=10 --max-line-length=127 --statistics)
   run-tests:
     runs-on: ubuntu-latest
     steps:
