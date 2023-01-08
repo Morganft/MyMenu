@@ -4,3 +4,4 @@ credentials.**
 *.sqlite*
 **/__pycache__
 test_env/
+.vscode
