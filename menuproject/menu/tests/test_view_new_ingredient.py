@@ -9,8 +9,9 @@ from ..forms import NewIngredientForm
 
 class NewIngredientTests(TestCase):
     def setUp(self):
-        self.user = User.objects.create(
+        self.user = User.objects.create_user(
             username='user1', email='user1@mail.com', password='123456')
+        self.client.login(username='user1', password='123456')
         self.receipt = Receipt.objects.create(
             name='Soup', description='Simple Soup', created_by=self.user)
         self.ingredient_type = IngredientType.objects.create(name='Tomato')

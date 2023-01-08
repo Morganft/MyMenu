@@ -9,8 +9,9 @@ from ..forms import NewReceiptForm
 
 class NewReceiptTests(TestCase):
     def setUp(self):
-        self.user = User.objects.create(
+        self.user = User.objects.create_user(
             username='user1', email='user1@mail.com', password='123456')
+        self.client.login(username='user1', password='123456')
 
     def test_success_status_code(self):
         url = reverse('new_receipt')
@@ -69,3 +70,13 @@ class NewReceiptTests(TestCase):
         response = self.client.get(url)
         form = response.context.get('form')
         self.assertIsInstance(form, NewReceiptForm)
+
+
+class LoginRequiredNewReceiptTest(TestCase):
+    def setUp(self):
+        self.url = reverse('new_receipt')
+        self.response = self.client.get(self.url)
+
+    def test_redirection(self):
+        login_url = reverse('login')
+        self.assertRedirects(self.response, '{login_url}?next={url}'.format(login_url=login_url, url=self.url))
