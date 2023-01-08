@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 
 from .forms import NewIngredientForm, NewReceiptForm
 from .models import Receipt, IngredientType
@@ -23,6 +24,7 @@ def receipt(request, pk):
     return render(request, 'receipt.html', {'receipt': receipt})
 
 
+@login_required
 def new_ingredient(request, receipt_pk):
     receipt = get_object_or_404(Receipt, pk=receipt_pk)
 
@@ -43,6 +45,7 @@ def new_ingredient(request, receipt_pk):
                                                    'form': form})
 
 
+@login_required
 def new_receipt(request):
     if request.method == 'POST':
         form = NewReceiptForm(request.POST)
