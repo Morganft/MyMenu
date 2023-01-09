@@ -1,5 +1,4 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
 from .forms import NewIngredientForm, NewReceiptForm
@@ -51,7 +50,7 @@ def new_receipt(request):
         form = NewReceiptForm(request.POST)
         if form.is_valid():
             receipt = form.save(commit=False)
-            receipt.created_by = User.objects.first()
+            receipt.created_by = request.user
             receipt.save()
 
             return redirect('home')
