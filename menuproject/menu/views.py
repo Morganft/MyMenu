@@ -1,8 +1,9 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
+from django.views.generic import UpdateView
 
 from .forms import NewIngredientForm, NewReceiptForm, NewStepForm
-from .models import Receipt, IngredientType
+from .models import Receipt, IngredientType, Step
 
 
 # Create your views here.
@@ -73,3 +74,16 @@ def new_step(request, receipt_pk):
     else:
         form = NewStepForm()
     return render(request, 'new_step.html', {'receipt': receipt, 'form': form})
+
+
+class StepUpdateView(UpdateView):
+    model = Step
+    fields = ('name', 'description')
+    template_name = 'edit_step.html'
+    pk_url_kwarg = 'step_pk'
+    context_object_name = 'step'
+
+    def form_valid(self, form):
+        step = form.save(commit=False)
+        step.save()
+        return redirect('receipt', pk=step.receipt.pk)
