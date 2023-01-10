@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 
-from .forms import NewIngredientForm, NewReceiptForm
+from .forms import NewIngredientForm, NewReceiptForm, NewStepForm
 from .models import Receipt, IngredientType
 
 
@@ -53,8 +53,23 @@ def new_receipt(request):
             receipt.created_by = request.user
             receipt.save()
 
-            return redirect('home')
+            return redirect('receipt', pk=receipt.pk)
     else:
         form = NewReceiptForm()
 
     return render(request, 'new_receipt.html', {'form': form})
+
+
+@login_required
+def new_step(request, receipt_pk):
+    receipt = get_object_or_404(Receipt, pk=receipt_pk)
+    if request.method == 'POST':
+        form = NewStepForm(request.POST)
+        if form.is_valid():
+            step = form.save(commit=False)
+            step.receipt = receipt
+            step.save()
+            return redirect('receipt', pk=receipt_pk)
+    else:
+        form = NewStepForm()
+    return render(request, 'new_step.html', {'receipt': receipt, 'form': form})

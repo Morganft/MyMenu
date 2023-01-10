@@ -54,6 +54,8 @@ urlpatterns = [
     re_path(r'^receipts/(?P<pk>\d+)/$', views.receipt, name='receipt'),
     re_path(r'^receipts/(?P<receipt_pk>\d+)/new_ingredient/$',
             views.new_ingredient, name='new_ingredient'),
+    re_path(r'^receipts/(?P<receipt_pk>\d+)/new_step/$',
+            views.new_step, name='new_step'),
     path('receipts/', views.receipts, name='receipts'),
     path('receipts/new_receipt/', views.new_receipt, name="new_receipt"),
     path('admin/', admin.site.urls),

@@ -8,7 +8,7 @@ from ..models import Receipt
 
 class ReceiptTests(TestCase):
     def setUp(self):
-        self.user = User.objects.create(
+        self.user = User.objects.create_user(
             username='user1', email='user1@mail.com', password='123456')
         self.receipt = Receipt.objects.create(
             name='Soup', description='Simple Soup', created_by=self.user)
