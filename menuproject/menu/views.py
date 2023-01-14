@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 from django.views.generic import UpdateView
 
 from .forms import NewIngredientForm, NewReceiptForm, NewStepForm
@@ -76,12 +77,17 @@ def new_step(request, receipt_pk):
     return render(request, 'new_step.html', {'receipt': receipt, 'form': form})
 
 
+@method_decorator(login_required, name='dispatch')
 class StepUpdateView(UpdateView):
     model = Step
     fields = ('name', 'description')
     template_name = 'edit_step.html'
     pk_url_kwarg = 'step_pk'
     context_object_name = 'step'
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.filter(receipt__created_by=self.request.user)
 
     def form_valid(self, form):
         step = form.save(commit=False)
