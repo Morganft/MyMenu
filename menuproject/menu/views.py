@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.generic import UpdateView
+from django.views.generic import ListView
 
 from .forms import NewIngredientForm, NewReceiptForm, NewStepForm
 from .models import Receipt, IngredientType, Step
@@ -14,10 +15,10 @@ def home(request):
     return render(request, 'home.html', {'receipts': receipts})
 
 
-def receipts(request):
-    receipts = Receipt.objects.all()
-
-    return render(request, 'receipts.html', {'receipts': receipts})
+class ReceiptsListView(ListView):
+    model = Receipt
+    context_object_name = 'receipts'
+    template_name = 'receipts.html'
 
 
 def receipt(request, pk):

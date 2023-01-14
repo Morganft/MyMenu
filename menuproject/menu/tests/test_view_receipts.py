@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.urls import reverse, resolve
 from django.contrib.auth.models import User
 
-from ..views import receipts
+from ..views import ReceiptsListView
 from ..models import Receipt
 
 
@@ -20,7 +20,7 @@ class ReceiptsTests(TestCase):
 
     def test_receipts_url_resolves_receipts_view(self):
         view = resolve('/receipts/')
-        self.assertEquals(view.func, receipts)
+        self.assertEquals(view.func.view_class, ReceiptsListView)
 
     def test_receipts_view_contains_link_to_receipt_page(self):
         receipt_url = reverse('receipt', kwargs={'pk': self.receipt.pk})
