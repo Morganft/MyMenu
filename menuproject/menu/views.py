@@ -19,6 +19,11 @@ class ReceiptsListView(ListView):
     model = Receipt
     context_object_name = 'receipts'
     template_name = 'receipts.html'
+    paginate_by = 20
+
+    def get_queryset(self):
+        queryset = Receipt.objects.all().order_by('name')
+        return queryset
 
 
 def receipt(request, pk):
