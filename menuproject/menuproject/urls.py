@@ -61,4 +61,5 @@ urlpatterns = [
     path('receipts/', views.ReceiptsListView.as_view(), name='receipts'),
     path('receipts/new_receipt/', views.new_receipt, name="new_receipt"),
     path('admin/', admin.site.urls),
+    path('settings/account/', account_views.UserUpdateView.as_view(), name='my_account'),
 ]
