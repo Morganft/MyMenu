@@ -61,7 +61,8 @@ class StepUpdateViewTests(StepUpdateViewTestCase):
         self.assertIsInstance(form, ModelForm)
 
     def test_form_input(self):
-        self.assertContains(self.response, '<input', 3)
+        self.assertContains(self.response, '<input', 2)
+        self.assertContains(self.response, '<textarea', 1)
 
 
 class SuccessfulStepUpdateViewTests(StepUpdateViewTestCase):

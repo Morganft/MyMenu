@@ -4,6 +4,11 @@
 
 {% block title %}New step{% endblock %}
 
+{% block stylesheet %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+{% endblock %}
+
+
 {% block breadcrumb %}
     <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
     <li class="breadcrumb-item"><a href="{% url 'receipts' %}">Receipts</a></li>
@@ -17,4 +22,11 @@
         {% include 'includes/form.html' %}
         <button type="submit" class="btn btn-success">Save a step</button>
     </form>
+{% endblock %}
+
+{% block javascript %}
+    <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+    <script>
+    var simplemde = new SimpleMDE({ element: document.getElementById("id_description") });
+    </script>
 {% endblock %}
