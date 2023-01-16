@@ -44,7 +44,8 @@ class NewStepTests(NewStepTestCase):
         self.assertIsInstance(form, NewStepForm)
 
     def test_form_inputs(self):
-        self.assertContains(self.response, '<input', 3)
+        self.assertContains(self.response, '<input', 2)
+        self.assertContains(self.response, '<textarea', 1)
 
 
 class SuccessfulNewStepTests(NewStepTestCase):
