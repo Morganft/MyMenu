@@ -1,0 +1,4 @@
+SECRET_KEY=secret_key
+DEBUG=True
+ALLOWED_HOSTS=.loclhost,127.0.0.1
+DATABASE_URL=sqlite:////menuproject/db.sqlite3
