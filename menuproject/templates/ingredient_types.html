@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+  <li class="breadcrumb-item active">Ingredient types</li>
+{% endblock %}
+
+{% block content %}
+  <div class="mb-4">
+    <a href="#" class="btn btn-primary">New ingredient type</a>
+  </div>
+
+  <table class="table">
+    <thead class="thead-dark">
+      <tr>
+        <th>Ingredient type</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for ingredient_type in ingredient_types %}
+        <tr>
+          <td>
+            <a href="#">{{ ingredient_type.name }}</a>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% include 'includes/pagination.html' %}
+{% endblock %}
