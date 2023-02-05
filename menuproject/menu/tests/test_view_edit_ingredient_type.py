@@ -11,7 +11,7 @@ class IngredientTypeUpdateViewTestCase(TestCase):
     def setUp(self):
         self.username = 'john'
         self.password = '123'
-        user = User.objects.create_user(username=self.username, email='john@doe.com', password=self.password)
+        User.objects.create_user(username=self.username, email='john@doe.com', password=self.password)
         self.ingredient_type = IngredientType.objects.create(name='Test ingredient type')
         self.url = reverse('edit_ingredient_type', kwargs={
             'ingredient_type_pk': self.ingredient_type.pk
@@ -25,7 +25,7 @@ class LoginRequiredIngredientUpdateViewTests(IngredientTypeUpdateViewTestCase):
         self.assertRedirects(response, f'{login_url}?next={self.url}')
 
 
-class UnauthorizedStepUpdateCiew(IngredientTypeUpdateViewTestCase):
+class UnauthorizedIngredientTypeUpdateCiew(IngredientTypeUpdateViewTestCase):
     def setUp(self):
         super().setUp()
         username = 'jane'
@@ -38,7 +38,7 @@ class UnauthorizedStepUpdateCiew(IngredientTypeUpdateViewTestCase):
         self.assertEquals(self.response.status_code, 200)
 
 
-class StepUpdateViewTests(IngredientTypeUpdateViewTestCase):
+class IngredientTypeUpdateViewTests(IngredientTypeUpdateViewTestCase):
     def setUp(self):
         super().setUp()
         self.client.login(username=self.username, password=self.password)
@@ -62,7 +62,7 @@ class StepUpdateViewTests(IngredientTypeUpdateViewTestCase):
         self.assertContains(self.response, '<input', 2)
 
 
-class SuccessfulStepUpdateViewTests(IngredientTypeUpdateViewTestCase):
+class SuccessfulIngredientTypeUpdateViewTests(IngredientTypeUpdateViewTestCase):
     def setUp(self):
         super().setUp()
         self.client.login(username=self.username, password=self.password)
@@ -77,7 +77,7 @@ class SuccessfulStepUpdateViewTests(IngredientTypeUpdateViewTestCase):
         self.assertEquals(self.ingredient_type.name, 'New name')
 
 
-class InvalidStepUpdateViewTests(IngredientTypeUpdateViewTestCase):
+class InvalidIngredientTypeUpdateViewTests(IngredientTypeUpdateViewTestCase):
     def setUp(self):
         super().setUp()
         self.client.login(username=self.username, password=self.password)
