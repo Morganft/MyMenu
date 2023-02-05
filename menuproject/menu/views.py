@@ -4,7 +4,7 @@ from django.utils.decorators import method_decorator
 from django.views.generic import UpdateView
 from django.views.generic import ListView
 
-from .forms import NewIngredientForm, NewReceiptForm, NewStepForm
+from .forms import NewIngredientForm, NewReceiptForm, NewStepForm, NewIngredientTypeForm
 from .models import Receipt, IngredientType, Step
 
 
@@ -30,6 +30,7 @@ def receipt(request, pk):
     receipt = get_object_or_404(Receipt, pk=pk)
     return render(request, 'receipt.html', {'receipt': receipt})
 
+
 class IngredientTypesListView(ListView):
     model = IngredientType
     context_object_name = 'ingredient_types'
@@ -39,6 +40,7 @@ class IngredientTypesListView(ListView):
     def get_queryset(self):
         queryset = IngredientType.objects.all().order_by('name')
         return queryset
+
 
 @login_required
 def new_ingredient(request, receipt_pk):
@@ -59,6 +61,21 @@ def new_ingredient(request, receipt_pk):
     return render(request, 'new_ingredient.html', {'receipt': receipt,
                                                    'ingredient_types': ingredient_types,
                                                    'form': form})
+
+
+@login_required
+def new_ingredient_type(request):
+    if request.method == 'POST':
+        form = NewIngredientTypeForm(request.POST)
+        if form.is_valid():
+            ingredient_type = form.save(commit=False)
+            ingredient_type.save()
+
+            return redirect('ingredient_types')
+    else:
+        form = NewIngredientTypeForm()
+
+    return render(request, 'new_ingredient_type.html', {'form': form})
 
 
 @login_required
