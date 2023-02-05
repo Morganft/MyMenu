@@ -30,6 +30,15 @@ def receipt(request, pk):
     receipt = get_object_or_404(Receipt, pk=pk)
     return render(request, 'receipt.html', {'receipt': receipt})
 
+class IngredientTypesListView(ListView):
+    model = IngredientType
+    context_object_name = 'ingredient_types'
+    template_name = 'ingredient_types.html'
+    paginate_by = 20
+
+    def get_queryset(self):
+        queryset = IngredientType.objects.all().order_by('name')
+        return queryset
 
 @login_required
 def new_ingredient(request, receipt_pk):
