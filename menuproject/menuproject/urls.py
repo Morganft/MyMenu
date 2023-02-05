@@ -62,6 +62,8 @@ urlpatterns = [
     path('receipts/new_receipt/', views.new_receipt, name="new_receipt"),
     path('ingredient_types/', views.IngredientTypesListView.as_view(), name='ingredient_types'),
     path('ingredient_types/new_ingredient_type/', views.new_ingredient_type, name="new_ingredient_type"),
+    re_path(r'^ingredient_types/(?P<ingredient_type_pk>\d+)/edit/$',
+            views.IngredientTypeUpdateView.as_view(), name='edit_ingredient_type'),
     path('admin/', admin.site.urls),
     path('settings/account/', account_views.UserUpdateView.as_view(), name='my_account'),
 ]

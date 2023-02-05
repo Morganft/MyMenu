@@ -125,3 +125,18 @@ class StepUpdateView(UpdateView):
         step = form.save(commit=False)
         step.save()
         return redirect('receipt', pk=step.receipt.pk)
+
+
+@method_decorator(login_required, name='dispatch')
+class IngredientTypeUpdateView(UpdateView):
+    model = IngredientType
+    fields = ('name',)
+    template_name = 'edit_ingredient_type.html'
+    pk_url_kwarg = 'ingredient_type_pk'
+    context_object_name = 'ingredient_type'
+
+    def form_valid(self, form):
+        ingredient_type = form.save(commit=False)
+        ingredient_type.save()
+        return redirect('ingredient_types')
+
