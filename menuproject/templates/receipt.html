@@ -26,8 +26,10 @@
     </thead>
     <tbody>
       {% for ingredient in receipt.ingridients.all %}
-        <td>{{ ingredient.type.name }}</td>
-        <td>{{ ingredient.amount }}</td>
+        <tr>
+          <td>{{ ingredient.type.name }}</td>
+          <td>{{ ingredient.amount }}</td>
+        </tr>
       {% endfor %}
     </tbody>
   </table>
