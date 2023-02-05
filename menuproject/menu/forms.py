@@ -12,6 +12,14 @@ class NewIngredientForm(forms.ModelForm):
         fields = ['type', 'amount']
 
 
+class NewIngredientTypeForm(forms.ModelForm):
+    forms.CharField(max_length=80)
+
+    class Meta:
+        model = IngredientType
+        fields = ['name',]
+
+
 class NewReceiptForm(forms.ModelForm):
     name = forms.CharField(max_length=80)
     description = forms.CharField(widget=forms.Textarea(attrs={'rows': 5, 'placeholder': 'What is in your recipe?'}),
