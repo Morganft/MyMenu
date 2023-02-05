@@ -139,4 +139,3 @@ class IngredientTypeUpdateView(UpdateView):
         ingredient_type = form.save(commit=False)
         ingredient_type.save()
         return redirect('ingredient_types')
-
