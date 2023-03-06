@@ -17,7 +17,7 @@
 {% endblock %}
 
 {% block content %}
-    <form class="mb-4" method="post" novalidate>
+    <form class="mb-4" method="post" enctype="multipart/form-data" novalidate>
         {% csrf_token %}
         {% include 'includes/form.html' %}
         <button type="submit" class="btn btn-success">Save a step</button>

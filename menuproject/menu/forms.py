@@ -1,5 +1,7 @@
 from django import forms
+
 from .models import Ingredient, IngredientType, Receipt, Step
+from .widgets import ImageWidget
 
 
 class NewIngredientForm(forms.ModelForm):
@@ -33,4 +35,7 @@ class NewReceiptForm(forms.ModelForm):
 class NewStepForm(forms.ModelForm):
     class Meta:
         model = Step
-        fields = ['name', 'description']
+        fields = ['name', 'description', 'image']
+        widgets = {
+            'image': ImageWidget()
+        }

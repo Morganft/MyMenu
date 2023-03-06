@@ -1,7 +1,10 @@
 from django.contrib.auth.models import User
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.urls import reverse, resolve
 from django.forms import ModelForm
+from django.core.files.uploadedfile import SimpleUploadedFile
+
+from .image_helper import ImageFactory, MOCK_MEDIA_ROOT
 
 from ..models import Receipt, Step
 from ..views import StepUpdateView
@@ -61,15 +64,21 @@ class StepUpdateViewTests(StepUpdateViewTestCase):
         self.assertIsInstance(form, ModelForm)
 
     def test_form_input(self):
-        self.assertContains(self.response, '<input', 2)
+        self.assertContains(self.response, '<input', 3)
         self.assertContains(self.response, '<textarea', 1)
+        self.assertContains(self.response, 'type="file"', 1)
 
 
+@override_settings(MEDIA_ROOT=MOCK_MEDIA_ROOT)
 class SuccessfulStepUpdateViewTests(StepUpdateViewTestCase):
     def setUp(self):
         super().setUp()
         self.client.login(username=self.username, password=self.password)
-        self.response = self.client.post(self.url, {'name': self.step.name, 'description': 'new description'})
+        self.imageFactory = ImageFactory()
+        image_file = self.imageFactory.getImage()
+        test_image = SimpleUploadedFile('new_image.jpg', image_file.read())
+        self.response = self.client.post(
+            self.url, {'name': self.step.name, 'description': 'new description', 'image': test_image})
 
     def test_redirection(self):
         receipt_url = reverse('receipt', kwargs={'pk': self.receipt.pk})
@@ -78,6 +87,10 @@ class SuccessfulStepUpdateViewTests(StepUpdateViewTestCase):
     def test_step_changed(self):
         self.step.refresh_from_db()
         self.assertEquals(self.step.description, 'new description')
+
+    def tearDown(self) -> None:
+        self.imageFactory.cleanUp()
+        return super().tearDown()
 
 
 class InvalidStepUpdateViewTests(StepUpdateViewTestCase):
