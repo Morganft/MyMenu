@@ -1,6 +1,9 @@
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.urls import reverse, resolve
 from django.contrib.auth.models import User
+from django.core.files.uploadedfile import SimpleUploadedFile
+
+from .image_helper import ImageFactory, MOCK_MEDIA_ROOT
 
 from ..models import Receipt, Step
 from ..views import new_step
@@ -44,15 +47,21 @@ class NewStepTests(NewStepTestCase):
         self.assertIsInstance(form, NewStepForm)
 
     def test_form_inputs(self):
-        self.assertContains(self.response, '<input', 2)
+        self.assertContains(self.response, '<input', 3)
         self.assertContains(self.response, '<textarea', 1)
+        self.assertContains(self.response, 'type="file"', 1)
 
 
+@override_settings(MEDIA_ROOT=MOCK_MEDIA_ROOT)
 class SuccessfulNewStepTests(NewStepTestCase):
     def setUp(self):
         super().setUp()
         self.client.login(username=self.username, password=self.password)
-        self.response = self.client.post(self.url, {'name': 'step 1', 'description': 'just make step 1'})
+        self.imageFactory = ImageFactory()
+        image_file = self.imageFactory.getImage()
+        test_image = SimpleUploadedFile('new_image.jpg', image_file.read())
+        self.response = self.client.post(
+            self.url, {'name': 'step 1', 'description': 'just make step 1', 'image': test_image})
 
     def test_redirections(self):
         receipt_url = reverse('receipt', kwargs={'pk': self.receipt.pk})
@@ -60,6 +69,10 @@ class SuccessfulNewStepTests(NewStepTestCase):
 
     def test_step_created(self):
         self.assertEquals(Step.objects.count(), 1)
+
+    def tearDown(self) -> None:
+        self.imageFactory.cleanUp()
+        return super().tearDown()
 
 
 class InvalidNewStepTests(NewStepTestCase):

@@ -98,7 +98,7 @@ def new_receipt(request):
 def new_step(request, receipt_pk):
     receipt = get_object_or_404(Receipt, pk=receipt_pk)
     if request.method == 'POST':
-        form = NewStepForm(request.POST)
+        form = NewStepForm(request.POST, request.FILES)
         if form.is_valid():
             step = form.save(commit=False)
             step.receipt = receipt
@@ -112,10 +112,10 @@ def new_step(request, receipt_pk):
 @method_decorator(login_required, name='dispatch')
 class StepUpdateView(UpdateView):
     model = Step
-    fields = ('name', 'description')
     template_name = 'edit_step.html'
     pk_url_kwarg = 'step_pk'
     context_object_name = 'step'
+    form_class = NewStepForm
 
     def get_queryset(self):
         queryset = super().get_queryset()

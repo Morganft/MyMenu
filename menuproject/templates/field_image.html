@@ -1,0 +1,54 @@
+{% load static %}
+
+<div class="control-group">
+    <div class="controls">
+        <div class="fileupload fileupload-new" data-provides="fileupload">
+            {% if widget.value %}
+                <div class="row">
+                    <div class="col-md-12">
+                        <img src="{{ widget.value.url }}" alt="{{ widget.value }}" id="shownImage" class="img-thumbnail" width="200" height="200">
+                    </div>
+                </div>
+            {% else %}
+                <div class="row">
+                    <div class="col-md-12">
+                        <img src="/media/img/dish.svg" alt="{{ widget.name }}" id="shownImage" class="img-thumbnail" width="200" height="200">
+                    </div>
+                </div>
+            {% endif %}
+            <div id="selectedImage"></div>
+            <div class="form-inline">
+                <input type="{{ widget.type }}" hidden="true" id="customFile1" class="filestyle" name="{{ widget.name }}" data-icon="false" data-classButton="btn btn-default" data-classInput="form-control">
+                <button class="btn btn-outline-secondary" type="button" onclick="document.getElementById('customFile1').click()">Choose file</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block javascript %}
+<script src="{% static 'js/jquery-3.6.1.min.js' %}"></script>
+<script>
+    var storedFiles = [];
+    $(document).ready(function() {
+        $("#customFile1").on("change", handleFileSelect);
+    });
+
+    function handleFileSelect(e) {
+        var files = e.target.files;
+        var filesArr = Array.prototype.slice.call(files);
+        filesArr.forEach(function(f) {
+            if (!f.type.match("image.*")) {
+                return;
+            }
+            storedFiles.push(f);
+
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                $("#shownImage").attr("src", e.target.result);
+                $("#shownImage").data("file", f.name);
+            };
+            reader.readAsDataURL(f);
+        })
+    }
+</script>
+{% endblock %}
