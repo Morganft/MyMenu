@@ -30,7 +30,7 @@ class LoginRequiredStepUpdateViewTests(StepUpdateViewTestCase):
         self.assertRedirects(response, f'{login_url}?next={self.url}')
 
 
-class UnauthorizedStepUpdateCiew(StepUpdateViewTestCase):
+class UnauthorizedStepUpdateView(StepUpdateViewTestCase):
     def setUp(self):
         super().setUp()
         username = 'jane'

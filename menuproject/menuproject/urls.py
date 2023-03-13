@@ -60,6 +60,8 @@ urlpatterns = [
             views.new_step, name='new_step'),
     re_path(r'^receipts/(?P<receipt_pk>\d+)/steps/(?P<step_pk>\d+)/edit/$',
             views.StepUpdateView.as_view(), name='edit_step'),
+    re_path(r'^receipts/(?P<receipt_pk>\d+)/steps/(?P<pk>\d+)/delete/$',
+            views.StepDeleteView.as_view(), name='delete_step'),
     path('receipts/', views.ReceiptsListView.as_view(), name='receipts'),
     path('receipts/new_receipt/', views.new_receipt, name="new_receipt"),
     path('ingredient_types/', views.IngredientTypesListView.as_view(), name='ingredient_types'),
