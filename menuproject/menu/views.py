@@ -1,7 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
+from django.urls import reverse
 from django.utils.decorators import method_decorator
-from django.views.generic import UpdateView
+from django.views.generic import UpdateView, DeleteView
 from django.views.generic import ListView
 
 from .forms import NewIngredientForm, NewReceiptForm, NewStepForm, NewIngredientTypeForm
@@ -125,6 +126,19 @@ class StepUpdateView(UpdateView):
         step = form.save(commit=False)
         step.save()
         return redirect('receipt', pk=step.receipt.pk)
+
+
+@method_decorator(login_required, name='dispatch')
+class StepDeleteView(DeleteView):
+    model = Step
+    template_name = "confirm_delete.html"
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.filter(receipt__created_by=self.request.user)
+
+    def get_success_url(self) -> str:
+        return reverse('receipt', kwargs={'pk': self.object.receipt.pk})
 
 
 @method_decorator(login_required, name='dispatch')
