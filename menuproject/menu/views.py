@@ -6,7 +6,7 @@ from django.views.generic import UpdateView, DeleteView
 from django.views.generic import ListView
 
 from .forms import NewIngredientForm, NewReceiptForm, NewStepForm, NewIngredientTypeForm
-from .models import Receipt, IngredientType, Step
+from .models import Receipt, IngredientType, Step, Ingredient
 
 
 # Create your views here.
@@ -62,6 +62,19 @@ def new_ingredient(request, receipt_pk):
     return render(request, 'new_ingredient.html', {'receipt': receipt,
                                                    'ingredient_types': ingredient_types,
                                                    'form': form})
+
+
+@method_decorator(login_required, name='dispatch')
+class IngredientDeleteView(DeleteView):
+    model = Ingredient
+    template_name = "confirm_delete.html"
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.filter(receipt__created_by=self.request.user)
+
+    def get_success_url(self) -> str:
+        return reverse('receipt', kwargs={'pk': self.object.receipt.pk})
 
 
 @login_required

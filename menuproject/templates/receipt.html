@@ -13,11 +13,28 @@
 {% endblock %}
 
 {% block content %}
-  <div class="mb-4">
-    <a href="{% url 'new_ingredient' receipt.pk %}" class="btn btn-primary">New Ingredient</a>
-  </div>
+  
+  <h3>
+    Ingredients
+    <a href="{% url 'new_ingredient' receipt.pk %}" class="btn btn-primary" role="button">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+        <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+      </svg>
+    </a>
+  </h3>
+  <ul class="list-group">
+    {% for ingredient in receipt.ingridients.all %}
+      <li class="list-group-item d-flex justify-content-between alig-item-start">
+        <div class="fw-bold">{{ ingredient.type.name }}</div>
+        <div>{{ ingredient.amount }}</div>
+        {% if receipt.created_by == user %}
+          <div><a href="{% url 'delete_ingredient' receipt.pk ingredient.pk %}" class="btn btn-danger btn-sm" role="button">Remove</a></div>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
 
-  <table class="table">
+  <!-- <table class="table">
     <thead class="thead-dark">
       <tr>
         <th>Ingredient</th>
@@ -29,10 +46,11 @@
         <tr>
           <td>{{ ingredient.type.name }}</td>
           <td>{{ ingredient.amount }}</td>
+          <td><a href="#" class="btn btn-danger btn-sm" role="button">Remove</a></td>
         </tr>
       {% endfor %}
     </tbody>
-  </table>
+  </table> -->
 
   {% for step in receipt.steps.all %}
     <div class="card mb-2">

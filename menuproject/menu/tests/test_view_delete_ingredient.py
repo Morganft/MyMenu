@@ -2,28 +2,29 @@ from django.test import TestCase
 from django.urls import resolve, reverse
 from django.contrib.auth.models import User
 
-from ..models import Receipt, Step
-from ..views import StepDeleteView
+from ..models import Receipt, Ingredient, IngredientType
+from ..views import IngredientDeleteView
 
 
-class DeleteStepTestCase(TestCase):
+class DeleteIngredientTestCase(TestCase):
     def setUp(self):
         self.username = 'john'
         self.password = '123'
         user = User.objects.create_user(username=self.username, email='john@doe.com', password=self.password)
         self.receipt = Receipt.objects.create(name='Soup', description='Just soup', created_by=user)
-        self.step = Step.objects.create(name='Soup', description='Just soup', receipt=self.receipt)
-        self.url = reverse('delete_step', kwargs={'receipt_pk': self.receipt.pk, 'pk': self.step.pk})
+        ingredient_type = IngredientType.objects.create(name="Just name")
+        self.ingredient = Ingredient.objects.create(type=ingredient_type, amount=4, receipt=self.receipt)
+        self.url = reverse('delete_ingredient', kwargs={'receipt_pk': self.receipt.pk, 'pk': self.ingredient.pk})
 
 
-class LoginRequiredDeleteStepTests(DeleteStepTestCase):
+class LoginRequiredDeleteIngredientTests(DeleteIngredientTestCase):
     def test_redirections(self):
         login_url = reverse('login')
         response = self.client.get(self.url)
         self.assertRedirects(response, f'{login_url}?next={self.url}')
 
 
-class UnauthorizedStepDeleteViewTests(DeleteStepTestCase):
+class UnauthorizedIngredientDeleteViewTests(DeleteIngredientTestCase):
     def setUp(self):
         super().setUp()
         username = 'jane'
@@ -40,7 +41,7 @@ class UnauthorizedStepDeleteViewTests(DeleteStepTestCase):
         self.assertEquals(self.post_response.status_code, 404)
 
 
-class DeleteStepTests(DeleteStepTestCase):
+class DeleteIngredientTests(DeleteIngredientTestCase):
     def setUp(self):
         super().setUp()
         self.client.login(username=self.username, password=self.password)
@@ -50,8 +51,8 @@ class DeleteStepTests(DeleteStepTestCase):
         self.assertEquals(self.response.status_code, 200)
 
     def test_view_class(self):
-        view = resolve(f'/receipts/{self.receipt.pk}/steps/{self.step.pk}/delete/')
-        self.assertEquals(view.func.view_class, StepDeleteView)
+        view = resolve(f'/receipts/{self.receipt.pk}/ingredients/{self.ingredient.pk}/delete/')
+        self.assertEquals(view.func.view_class, IngredientDeleteView)
 
     def test_csrf(self):
         self.assertContains(self.response, 'csrfmiddlewaretoken')
@@ -65,7 +66,7 @@ class DeleteStepTests(DeleteStepTestCase):
         self.assertContains(self.response, '<button', 1)
 
 
-class SuccessfullStepDeleteViewTests(DeleteStepTestCase):
+class SuccessfullIngredientDeleteViewTests(DeleteIngredientTestCase):
     def setUp(self):
         super().setUp()
         self.client.login(username=self.username, password=self.password)
@@ -76,4 +77,4 @@ class SuccessfullStepDeleteViewTests(DeleteStepTestCase):
         self.assertRedirects(self.response, receipt_url)
 
     def test_step_deleted(self):
-        self.assertEquals(Step.objects.count(), 0)
+        self.assertEquals(Ingredient.objects.count(), 0)
