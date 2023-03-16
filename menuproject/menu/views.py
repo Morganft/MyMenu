@@ -166,3 +166,20 @@ class IngredientTypeUpdateView(UpdateView):
         ingredient_type = form.save(commit=False)
         ingredient_type.save()
         return redirect('ingredient_types')
+
+
+@method_decorator(login_required, name='dispatch')
+class ReceiptUpdateView(UpdateView):
+    model = Receipt
+    template_name = 'edit_receipt.html'
+    context_object_name = 'receipt'
+    form_class = NewReceiptForm
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.filter(created_by=self.request.user)
+
+    def form_valid(self, form):
+        step = form.save(commit=False)
+        step.save()
+        return redirect('receipt', pk=self.object.pk)
