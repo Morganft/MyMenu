@@ -13,7 +13,13 @@
 {% endblock %}
 
 {% block content %}
-  
+  <h1>
+    <span>{{receipt.name}}</span>
+    <a href="{% url 'edit_receipt' receipt.pk%}" class="btn btn-primary float-end" type="button">Edit</a>
+  </h1>
+  <div>
+    <p>{{receipt.description}}</p>
+  </div>
   <h3>
     Ingredients
     <a href="{% url 'new_ingredient' receipt.pk %}" class="btn btn-primary" role="button">
@@ -33,24 +39,6 @@
       </li>
     {% endfor %}
   </ul>
-
-  <!-- <table class="table">
-    <thead class="thead-dark">
-      <tr>
-        <th>Ingredient</th>
-        <th>Amount</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for ingredient in receipt.ingridients.all %}
-        <tr>
-          <td>{{ ingredient.type.name }}</td>
-          <td>{{ ingredient.amount }}</td>
-          <td><a href="#" class="btn btn-danger btn-sm" role="button">Remove</a></td>
-        </tr>
-      {% endfor %}
-    </tbody>
-  </table> -->
 
   {% for step in receipt.steps.all %}
     <div class="card mb-2">
