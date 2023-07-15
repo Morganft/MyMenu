@@ -34,7 +34,12 @@
         <div class="fw-bold">{{ ingredient.type.name }}</div>
         <div>{{ ingredient.amount }}</div>
         {% if receipt.created_by == user %}
-          <div><a href="{% url 'delete_ingredient' receipt.pk ingredient.pk %}" class="btn btn-danger btn-sm" role="button">Remove</a></div>
+          <div>
+            <a href="{% url 'edit_ingredient' receipt.pk ingredient.pk %}" class="btn btn-primary btn-sm" role="button">Edit</a>
+          </div>
+          <div>
+            <a href="{% url 'delete_ingredient' receipt.pk ingredient.pk %}" class="btn btn-danger btn-sm" role="button">Remove</a>
+          </div>
         {% endif %}
       </li>
     {% endfor %}

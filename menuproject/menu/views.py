@@ -65,6 +65,24 @@ def new_ingredient(request, receipt_pk):
 
 
 @method_decorator(login_required, name='dispatch')
+class IngredientUpdateView(UpdateView):
+    model = Ingredient
+    template_name = 'edit_ingredient.html'
+    pk_url_kwarg = 'ingredient_pk'
+    context_object_name = 'ingredient'
+    form_class = NewIngredientForm
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.filter(receipt__created_by=self.request.user)
+
+    def form_valid(self, form):
+        ingredient = form.save(commit=False)
+        ingredient.save()
+        return redirect('receipt', pk=ingredient.receipt.pk)
+
+
+@method_decorator(login_required, name='dispatch')
 class IngredientDeleteView(DeleteView):
     model = Ingredient
     template_name = "confirm_delete.html"
