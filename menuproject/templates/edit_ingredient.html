@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit ingredient{% endblock %}
+
+{% block stylesheet %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+{% endblock %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'receipts' %}">Receipts</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'receipt' ingredient.receipt.pk %}">{{ ingredient.receipt.name }}</a></li>
+    <li class="breadcrumb-item active">Edit ingredient</li>
+{% endblock %}
+
+{% block content %}
+    <form method="post" class="mb-4" enctype="multipart/form-data" novalidate>
+        {% csrf_token %}
+        {% include 'includes/form.html' %}
+        <button type="submit" class="btn btn-success">Save changes</button>
+        <a href="{% url 'receipt' ingredient.receipt.pk %}" class="btn btn-outline-secondary" role="button">Cancel</a>
+    </form>
+{% endblock %}
