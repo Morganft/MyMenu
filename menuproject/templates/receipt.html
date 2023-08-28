@@ -20,6 +20,9 @@
   <div>
     <p>{{receipt.description}}</p>
   </div>
+  <div>
+    <span>Portions: {{receipt.amount}}</span>
+  </div>
   <h3>
     Ingredients
     <a href="{% url 'new_ingredient' receipt.pk %}" class="btn btn-primary" role="button">

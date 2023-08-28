@@ -12,7 +12,7 @@ class ReceiptUpdateViewTestCase(TestCase):
         self.username = 'john'
         self.password = '123'
         user = User.objects.create_user(username=self.username, email='john@doe.com', password=self.password)
-        self.receipt = Receipt.objects.create(name='Soup', description='Just soup', created_by=user)
+        self.receipt = Receipt.objects.create(name='Soup', amount=1, description='Just soup', created_by=user)
         self.url = reverse('edit_receipt', kwargs={
             'pk': self.receipt.pk,
         })
@@ -59,7 +59,7 @@ class ReceiptUpdateViewTests(ReceiptUpdateViewTestCase):
         self.assertIsInstance(form, ModelForm)
 
     def test_form_input(self):
-        self.assertContains(self.response, '<input', 2)
+        self.assertContains(self.response, '<input', 3)
         self.assertContains(self.response, '<textarea', 1)
 
 
@@ -68,7 +68,7 @@ class SuccessfulReceiptUpdateViewTests(ReceiptUpdateViewTestCase):
         super().setUp()
         self.client.login(username=self.username, password=self.password)
         self.response = self.client.post(
-            self.url, {'name': self.receipt.name, 'description': 'new description'})
+            self.url, {'name': self.receipt.name, 'amount': 2, 'description': 'new description'})
 
     def test_redirection(self):
         receipt_url = reverse('receipt', kwargs={'pk': self.receipt.pk})
@@ -77,6 +77,7 @@ class SuccessfulReceiptUpdateViewTests(ReceiptUpdateViewTestCase):
     def test_receipt_changed(self):
         self.receipt.refresh_from_db()
         self.assertEquals(self.receipt.description, 'new description')
+        self.assertEquals(self.receipt.amount, 2)
 
 
 class InvalidReceiptUpdateViewTests(ReceiptUpdateViewTestCase):

@@ -11,7 +11,7 @@ class ReceiptTests(TestCase):
         self.user = User.objects.create_user(
             username='user1', email='user1@mail.com', password='123456')
         self.receipt = Receipt.objects.create(
-            name='Soup', description='Simple Soup', created_by=self.user)
+            name='Soup', amount=1, description='Simple Soup', created_by=self.user)
 
     def test_receipt_view_success_status_code(self):
         url = reverse('receipt', kwargs={'pk': self.receipt.pk})

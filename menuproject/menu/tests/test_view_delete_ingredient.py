@@ -11,7 +11,7 @@ class DeleteIngredientTestCase(TestCase):
         self.username = 'john'
         self.password = '123'
         user = User.objects.create_user(username=self.username, email='john@doe.com', password=self.password)
-        self.receipt = Receipt.objects.create(name='Soup', description='Just soup', created_by=user)
+        self.receipt = Receipt.objects.create(name='Soup', amount=1, description='Just soup', created_by=user)
         ingredient_type = IngredientType.objects.create(name="Just name")
         self.ingredient = Ingredient.objects.create(type=ingredient_type, amount=4, receipt=self.receipt)
         self.url = reverse('delete_ingredient', kwargs={'receipt_pk': self.receipt.pk, 'pk': self.ingredient.pk})
