@@ -11,7 +11,7 @@ class DeleteStepTestCase(TestCase):
         self.username = 'john'
         self.password = '123'
         user = User.objects.create_user(username=self.username, email='john@doe.com', password=self.password)
-        self.receipt = Receipt.objects.create(name='Soup', description='Just soup', created_by=user)
+        self.receipt = Receipt.objects.create(name='Soup', amount=1, description='Just soup', created_by=user)
         self.step = Step.objects.create(name='Soup', description='Just soup', receipt=self.receipt)
         self.url = reverse('delete_step', kwargs={'receipt_pk': self.receipt.pk, 'pk': self.step.pk})
 

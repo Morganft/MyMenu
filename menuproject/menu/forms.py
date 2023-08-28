@@ -29,7 +29,7 @@ class NewReceiptForm(forms.ModelForm):
 
     class Meta:
         model = Receipt
-        fields = ['name', 'description']
+        fields = ['name', 'amount', 'description']
 
 
 class NewStepForm(forms.ModelForm):

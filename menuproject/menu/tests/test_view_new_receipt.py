@@ -43,6 +43,7 @@ class NewReceiptTests(TestCase):
         url = reverse('new_receipt')
         data = {
             'name': 'Just name',
+            'amount': 1,
             'description': 'Just description'
         }
         self.client.post(url, data)
@@ -59,6 +60,7 @@ class NewReceiptTests(TestCase):
         url = reverse('new_receipt')
         data = {
             'name': '',
+            'amount': 0,
             'description': ''
         }
         response = self.client.post(url, data)

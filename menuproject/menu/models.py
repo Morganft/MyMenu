@@ -8,6 +8,7 @@ from markdown import markdown
 class Receipt(models.Model):
     name = models.CharField(max_length=30)
     description = models.CharField(max_length=255)
+    amount = models.IntegerField()
     created_by = models.ForeignKey(
         User, related_name='receipts', on_delete=models.DO_NOTHING)
 

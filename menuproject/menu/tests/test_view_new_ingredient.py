@@ -13,7 +13,7 @@ class NewIngredientTests(TestCase):
             username='user1', email='user1@mail.com', password='123456')
         self.client.login(username='user1', password='123456')
         self.receipt = Receipt.objects.create(
-            name='Soup', description='Simple Soup', created_by=self.user)
+            name='Soup', amount=1, description='Simple Soup', created_by=self.user)
         self.ingredient_type = IngredientType.objects.create(name='Tomato')
 
     def test_new_ingredient_view_success_status_code(self):
