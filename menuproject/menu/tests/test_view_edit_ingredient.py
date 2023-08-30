@@ -80,7 +80,7 @@ class SuccessfulIngredientUpdateViewTests(IngredientUpdateViewTestCase):
 
     def test_ingredient_changed(self):
         self.ingredient.refresh_from_db()
-        self.assertEquals(self.ingredient.amount, '20')
+        self.assertEquals(self.ingredient.amount, 20)
         self.assertEquals(self.ingredient.type, self.new_ingredient_type)
 
 
