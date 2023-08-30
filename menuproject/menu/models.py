@@ -30,7 +30,7 @@ class IngredientType(models.Model):
 
 class Ingredient(models.Model):
     type = models.ForeignKey(IngredientType, on_delete=models.DO_NOTHING)
-    amount = models.CharField(max_length=30)
+    amount = models.IntegerField()
     receipt = models.ForeignKey(
         Receipt, related_name='ingridients', on_delete=models.DO_NOTHING)
 
