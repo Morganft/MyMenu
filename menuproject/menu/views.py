@@ -6,7 +6,7 @@ from django.views.generic import UpdateView, DeleteView
 from django.views.generic import ListView
 
 from .forms import NewIngredientForm, NewReceiptForm, NewStepForm, NewIngredientTypeForm
-from .models import Receipt, IngredientType, Step, Ingredient
+from .models import Receipt, IngredientType, Step, Ingredient, Tag
 
 
 # Create your views here.
@@ -23,8 +23,16 @@ class ReceiptsListView(ListView):
     paginate_by = 20
 
     def get_queryset(self):
-        queryset = Receipt.objects.all().order_by('name')
-        return queryset
+        queryset = Receipt.objects.all()
+        if 'tag_id' in self.kwargs:
+            queryset = Receipt.objects.filter(tags=self.kwargs["tag_id"])
+        return queryset.order_by('name')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if 'tag_id' in self.kwargs:
+            context['tag'] = get_object_or_404(Tag, id=self.kwargs["tag_id"])
+        return context
 
 
 def receipt(request, pk):
@@ -201,3 +209,13 @@ class ReceiptUpdateView(UpdateView):
         step = form.save(commit=False)
         step.save()
         return redirect('receipt', pk=self.object.pk)
+
+
+def list_receipts_by_tag(request, tag_id):
+    tag = get_object_or_404(Tag, id=tag_id)
+    receipts = Receipt.objects.filter(tags=tag)
+    context = {
+        'tag_name': tag.name,
+        'receipts': receipts
+    }
+    return render(request, 'receipts.html', context)

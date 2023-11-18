@@ -5,12 +5,20 @@ from markdown import markdown
 
 
 # Create your models here.
+class Tag(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+
+    def __str__(self) -> str:
+        return self.name
+
+
 class Receipt(models.Model):
     name = models.CharField(max_length=30)
     description = models.CharField(max_length=255)
     amount = models.IntegerField()
     created_by = models.ForeignKey(
         User, related_name='receipts', on_delete=models.DO_NOTHING)
+    tags = models.ManyToManyField(to=Tag, related_name="receipts")
 
     def __str__(self):
         return self.name

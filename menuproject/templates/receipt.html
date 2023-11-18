@@ -18,6 +18,11 @@
     <a href="{% url 'edit_receipt' receipt.pk%}" class="btn btn-primary float-end" type="button">Edit</a>
   </h1>
   <div>
+    {% for tag in receipt.tags.all %}
+      <a href="{% url 'tag' tag.id %}" class="badge badge-secondary">{{ tag }}</a>
+    {% endfor %}
+  </div>
+  <div>
     <p>{{receipt.description}}</p>
   </div>
   <div>
