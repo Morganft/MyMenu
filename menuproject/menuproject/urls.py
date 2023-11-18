@@ -75,6 +75,7 @@ urlpatterns = [
             views.IngredientTypeUpdateView.as_view(), name='edit_ingredient_type'),
     path('admin/', admin.site.urls),
     path('settings/account/', account_views.UserUpdateView.as_view(), name='my_account'),
+    path('receipts/tag/<int:tag_id>', views.ReceiptsListView.as_view(), name='receipts_tag'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
